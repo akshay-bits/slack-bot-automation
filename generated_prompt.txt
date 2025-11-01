@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+      "name": "Back Injury at Work",
+      "path": "/back-injury-at-work/",
+      "priority": "critical",
+      "seo": {
+        "title": "Back Injury at Work? Atlanta Lawyers Get Fast Results | Free Review",
+        "description": "Atlanta back injury lawyers with 25+ years winning workers comp cases. Free consultation. No fees unless we win. Call now for immediate help.",
+        "keywords": ["back injury at work lawyer atlanta", "georgia workers comp back injury", "back injury settlement compensation", "how much is a back injury claim worth"]
+      },
+      "sections": [
+        "Enhanced Header with Hero Section",
+        "Practice Areas Overview Grid",
+        "Attorney Profile with Photo",
+        "Trust Signals & Credentials",
+        "Service Area Map - Atlanta, Georgia",
+        "Client Testimonials",
+        "Educational Resources Preview",
+        "Free Survival Kit Offer",
+        "Multiple CTAs Throughout"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+prompt_generation_task:
+  description: >
+    You are an expert SEO and conversion optimization strategist for legal landing pages.
+
+    **TASK:** Generate a batch of conversion-optimized landing pages in one JSON payload.
+
+    **INPUTS (batch-capable):**
+    - website_url: {website_url}
+    - page_names (comma-separated): {page_names}
+    - injury_types (comma-separated): {injury_types}
+    - locations (comma-separated): {locations}
+    - personas (comma-separated): {personas}
+
+    **BATCH RULES:**
+    - Split comma-separated lists, trim whitespace.
+    - Pair by index: page_names[i], injury_types[i], locations[i], personas[i] form one page spec.
+    - If any list is shorter, reuse its last value for remaining pages.
+    - If a field is missing for an index, infer it sensibly from other fields and the website tone at {website_url}.
+    - Default region when not specified: Atlanta, Georgia.
+
+    **SEO OPTIMIZATION:**
+
+    **Title Tag Formula (60-70 chars):**
+    [Benefit/Problem] + [Location] + [Credibility] | [CTA]
+    Example: "Back Injury at Work? Atlanta Lawyers Get Fast Results | Free Review"
+
+    **Meta Description Formula (150-160 chars):**
+    [Problem Address] + [Solution/Benefit] + [Social Proof] + [Risk Reversal] + [CTA]
+    Example: "Atlanta back injury lawyers with 25+ years winning workers comp cases. Free consultation. No fees unless we win. Call now for immediate help."
+
+    **Keywords (4 variations):**
+    1. Primary: [topic] + [location] + "lawyer/attorney"
+    2. Secondary: [topic] + [state/region] + "workers comp"
+    3. Benefit: [topic] + "settlement/compensation"
+    4. Question: "how much is" + [topic] + "claim worth"
+    
+    **PERFORMANCE REQUIREMENTS:**
+    **Hard Limits:**
+    - Total page size: <1000KB (1MB)
+    - Load time: <3 seconds
+    - Image budget: 400-500KB total
+    - Video: 1 max (YouTube/Vimeo embed only)
+
+    **OUTPUT FORMAT:**
+    - Return a single valid JSON object with key "pages" containing an array.
+    - Each array item corresponds to one page spec and must strictly follow the format shown below.
+    - "path" must be a clean, lowercase, hyphenated URL path derived from the specific page (e.g., "/back-injury-workers-comp/").
+    - Keep content specific and fully filled (no placeholders).
+    - Sections should be concise strings (not objects) exactly as in the sample format.
+
+  expected_output: >
+    {
+      "pages": [
+        {
+          "name": "[page name here]",
+          "path": "/[derived-path]/",
+          "priority": "critical",
+          "seo": {
+            "title": "[~60-70 chars]",
+            "description": "[~150-160 chars]",
+            "keywords": ["[primary keyword]", "[secondary keyword]", "[supporting keyword]"]
+          },
+          "sections": [
+            "Enhanced Header with Hero Section",
+            "Practice Areas Overview Grid",
+            "Attorney Profile with Photo",
+            "Trust Signals & Credentials",
+            "Service Area Map - [region/county]",
+            "Client Testimonials",
+            "Educational Resources Preview",
+            "Free Survival Kit Offer",
+            "Multiple CTAs Throughout"
+          ]
+        }
+        // Additional page objects (one per spec)...
+      ]
+    }
+
+  agent: prompt_generator

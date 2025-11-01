@@ -1,0 +1,21 @@
+# Gateway service container (Python 3.11)
+# Flask gateway for handling Slack webhooks and forwarding to Lambda
+
+FROM python:3.11-slim
+
+# Install runtime dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+        flask>=3.1.2 \
+        python-dotenv>=1.2.1 \
+        httpx>=0.28.1
+
+# Set working directory
+WORKDIR /app
+
+# Copy validation module
+COPY src/validation.py /app/src/validation.py
+
+# Default command (will be overridden in docker-compose)
+CMD ["python", "local_gateway.py"]
+

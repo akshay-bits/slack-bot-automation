@@ -1,0 +1,88 @@
+version: "3.9"
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-slack-worker
+    ports:
+      - "9000:8080"   # Lambda RIE listens on 8080 inside the container
+    environment:
+      AWS_REGION: "us-east-1"
+      AWS_DEFAULT_REGION: "us-east-1"
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN}
+      SLACK_CHANNEL_ID: ${SLACK_CHANNEL_ID}
+      SPREADSHEET_ID: ${SPREADSHEET_ID}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      LOG_LEVEL: "INFO"
+      ENVIRONMENT: "development"
+      LAMBDA_HANDLER: "lambda_handler.lambda_function"
+      PORT: ${PORT}
+      MONGODB_URI: mongodb://mongodb:27017  # Use Docker service name
+      MONGODB_DB: ${MONGODB_DB:-ai_automation}
+    env_file:
+      - .env
+    volumes:
+      - ./google_credentials.json:/var/task/google_credentials.json:ro
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+
+  # MongoDB service for logging executions
+  mongodb:
+    image: mongo:7
+    container_name: ai-slack-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: ai_automation
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+  # Gateway service for handling Slack webhooks and forwarding to Lambda
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    container_name: ai-slack-gateway
+    ports:
+      - "3000:3000"   # Flask gateway (from local_gateway.py)
+    environment:
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN}
+      SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET}
+      WORKER_HOST: worker  # Docker service name for Lambda container
+      WORKER_PORT: 8080    # Lambda RIE port inside container
+    env_file:
+      - .env
+    volumes:
+      - ./local_gateway.py:/app/local_gateway.py:ro
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: python local_gateway.py
+    restart: unless-stopped
+    depends_on:
+      - worker
+      - mongodb
+
+  # Ngrok tunnel to expose local gateway publicly for Slack
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ai-slack-ngrok
+    ports:
+      - "4040:4040"   # Ngrok web interface
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml:ro
+    depends_on:
+      - gateway
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+

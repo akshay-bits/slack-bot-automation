@@ -1,0 +1,13 @@
+from .completion_prompts import (
+    AVAILABLE_COMMANDS,
+    AVAILABLE_COMMANDS_LIST,
+    COMMAND_EXAMPLES,
+)
+
+__all__ = [
+    "AVAILABLE_COMMANDS",
+    "AVAILABLE_COMMANDS_LIST",
+    "COMMAND_EXAMPLES",
+]
+
+

@@ -1,0 +1,72 @@
+# src/ai-agents/prompts/tasks.yaml
+prompt_generation_task:
+  description: >
+    First, scrape the website at {website_url} using ScrapeWebsiteTool to analyze its content and extract:
+    1. Overall tone and writing style
+    2. Key messaging and value propositions
+    3. Target audience characteristics
+    4. Content structure and patterns
+    5. Brand voice and personality
+    6. Color schemes and visual elements
+    7. Navigation patterns and user flow
+    8. Call-to-action styles and placement
+    9. Content hierarchy and typography
+    10. Social proof elements and testimonials
+    
+    Then, create a comprehensive landing page generation prompt that includes:
+    1. Exact tone, style, and brand voice guidelines
+    2. Detailed content structure with specific sections
+    3. Positioning and layout instructions for each element
+    4. Call-to-action placement and styling
+    5. Color palette and visual design guidelines
+    6. Typography and text formatting rules
+    7. Navigation structure and user flow
+    8. Social proof and trust elements placement
+    9. Form design and lead capture instructions
+    10. Mobile responsiveness guidelines
+    11. SEO optimization requirements
+    12. Performance and loading considerations
+    
+    The prompt should be a complete blueprint for generating landing pages that perfectly match the website's style and convert visitors effectively.
+  expected_output: >
+    A comprehensive landing page generation prompt template that includes:
+    
+    **BRAND ANALYSIS:**
+    - Website tone and style analysis
+    - Brand voice characteristics
+    - Target audience insights
+    - Key messaging themes
+    
+    **DESIGN GUIDELINES:**
+    - Color palette specifications
+    - Typography rules and font choices
+    - Visual element positioning
+    - Layout structure and spacing
+    
+    **CONTENT STRUCTURE:**
+    - Header section requirements (logo, navigation, CTA)
+    - Hero section specifications (headline, subheadline, CTA button)
+    - Feature/benefit sections layout
+    - Social proof placement (testimonials, logos, reviews)
+    - Pricing section design
+    - Footer requirements
+    
+    **FUNCTIONAL ELEMENTS:**
+    - Call-to-action button design and placement
+    - Form design and lead capture fields
+    - Navigation menu structure
+    - Contact information positioning
+    - Social media links placement
+    
+    **TECHNICAL REQUIREMENTS:**
+    - Mobile responsiveness guidelines
+    - Loading speed optimization
+    - SEO meta tags and structure
+    - Accessibility considerations
+    
+    **USAGE INSTRUCTIONS:**
+    - How to use this prompt for different landing page types
+    - Customization guidelines for different products/services
+    - A/B testing recommendations
+    - Performance tracking setup
+  agent: prompt_generator

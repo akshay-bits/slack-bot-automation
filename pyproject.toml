@@ -1,0 +1,27 @@
+[project]
+name = "ai-automation-slack"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.72.0",
+    "boto3>=1.40.62",
+    "crewai>=1.2.1",
+    "crewai-tools>=1.2.1",
+    "fastapi>=0.115.0",
+    "flask>=3.1.2",
+    "google-api-python-client>=2.185.0",
+    "google-auth>=2.42.0",
+    "google-auth-httplib2>=0.2.0",
+    "google-auth-oauthlib>=1.2.2",
+    "gspread>=6.2.1",
+    "httpx>=0.28.1",
+    "pymongo>=4.15.3",
+    "python-dotenv>=1.2.1",
+    "python-json-logger>=4.0.0",
+    "slack-bolt>=1.26.0",
+    "slack-sdk>=3.37.0",
+    "slackeventsapi>=3.0.3",
+    "uvicorn>=0.32.0",
+]
