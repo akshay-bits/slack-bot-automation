@@ -80,7 +80,6 @@ def lambda_function(event, context=None):
             command = command_parts[0]
             command_args = command_parts[1:] if len(command_parts) > 1 else []
             additional_lines = [line.strip() for line in lines[1:] if line.strip()]
-            print("command: ", command)
             # Process commands
             if command == "/generatepages":
                 default_logger.info("Processing /generate_pages command")
@@ -109,11 +108,8 @@ def lambda_function(event, context=None):
                 
                 # Generate pages (now synchronous, no event loop needed)
                 count = workflow.generate_pages()
-
-                return {
-                    "status": "success",
-                    "message": f"{count} pages are generated successfully",
-                }
+                bot_service.send_message(f"{count} pages are generated successfully", ts)
+                return {"status": "success", "message": "Pages generated successfully"}
 
             # elif command == "/publish_approved":
             #     # Combine command args and additional lines to form the search query
