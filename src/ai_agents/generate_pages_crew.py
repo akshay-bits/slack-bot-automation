@@ -7,8 +7,8 @@ from typing import List
 import os
 
 @CrewBase
-class LatestAiDevelopmentCrew():
-	"""LatestAiDevelopment crew"""
+class GeneratePagesCrew():
+	"""GeneratePagesCrew crew for generating pages"""
 	agents: List[BaseAgent]
 	tasks: List[Task]
 

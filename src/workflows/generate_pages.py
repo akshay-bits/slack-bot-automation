@@ -62,6 +62,8 @@ class GeneratePagesWorkflow(Singleton):
                     default_logger.error(f"Failed to update sheet status to 'generated' for {worksheet_name} with request_id: {sheet.get('requestId')}")
                     continue
 
+                demo_url_link = api_response.get('result', '').get('chat_result', '').get('latestVersion', '').get('demoUrl', '')
+
                 if self.sheets_singleton.update_sheet_data(
                     worksheet_name, 
                     sheet_record={
@@ -69,7 +71,7 @@ class GeneratePagesWorkflow(Singleton):
                         "injuryType": sheet.get('injuryType', ''),
                         "createdDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                         "path": api_response.get('result', '').get('path', ''),
-                        "demoUrlLink": api_response.get('result', '').get('chat_result', '').get('latestVersion', '').get('demoUrl', ''),
+                        "demoUrlLink": demo_url_link,
                     }, 
                     request_id=sheet.get('requestId')
                 ):
@@ -79,7 +81,7 @@ class GeneratePagesWorkflow(Singleton):
                     default_logger.error(f"Failed to update sheet data for {worksheet_name} with request_id: {sheet.get('requestId')}")
                     continue
 
-            return count
+            return count,demo_url_link
         except Exception as e:
             default_logger.error(f"Error generating pages: {e}")
             return 0

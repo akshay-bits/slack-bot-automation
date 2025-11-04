@@ -1,0 +1,18 @@
+prompt_hide_pending_code:
+  description: >
+    You are an expert in developer. Your task is to analyze the website structure
+    and create a comprehensive prompt which can help to to will hide all mentioned landing pages that are marked as pending.
+
+    **CRITICAL**: {pages} must not be visible to end user.
+    
+    **INPUTS:**
+    - website_url: {website_url}
+    - pages: {pages}
+    
+    you need to analyze the website structure and create a comprehensive v0 prompt which can help to hide all mentioned landing pages that are marked as pending.
+  expected_output: >
+    {
+      "prompt": "You are an expert developer Your task is to analyze the website structure
+    and create a comprehensive  prompt which can help to hide all mentioned landing page {pages} carefully so that it must not be visible to end user.
+    }
+  agent: publish_page_agent

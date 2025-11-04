@@ -17,6 +17,7 @@ from workflows.generate_pages import GeneratePagesWorkflow
 from services.sheets_service.sheets_singletone import SheetsSingleton
 from services.sheets_service.google_sheet_stratergy import GoogleSheetStrategy
 from config.settings import SPREADSHEET_ID, BASE_DIR
+from workflows.publish_approved import PublishApprovedWorkflow
 
 load_dotenv()
 
@@ -107,37 +108,39 @@ def lambda_function(event, context=None):
                 )
                 
                 # Generate pages (now synchronous, no event loop needed)
-                count = workflow.generate_pages()
-                bot_service.send_message(f"{count} pages are generated successfully", ts)
+                count, demo_url_link = workflow.generate_pages()
+                bot_service.send_message(f"{count} pages are generated successfully demo url: {demo_url_link}", ts)
                 return {"status": "success", "message": "Pages generated successfully"}
 
-            # elif command == "/publish_approved":
-            #     # Combine command args and additional lines to form the search query
-            #     query_parts = command_args + additional_lines
-            #     query = " ".join(query_parts).strip()
+            elif command == "/publish_approved":
+                # Combine command args and additional lines to form the search query
+                default_logger.info("Processing /publish_approved command")
 
-            #     if not query:
-            #         bot_service.send_error_message(
-            #             "Please provide a search query after /browse command", ts
-            #         )
-            #         return {"status": "error", "message": "Empty query"}
+                # Generate execution id and persist start record
+                execution_id = generate_execution_id()
+                save_execution_start(
+                    execution_id=execution_id,
+                    workflow_type="search_query",
+                    triggered_by=user_id,
+                    slack_command=text,
+                )
 
-            #     default_logger.info(f"Processing /browse command with query: {query}")
+                publish_workflow = PublishApprovedWorkflow(
+                    sheets_singleton=SheetsSingleton(
+                        strategy=GoogleSheetStrategy(
+                            credentials_file=f"{BASE_DIR}/google_credentials.json",
+                            sheet_id=SPREADSHEET_ID, 
+                            scopes=["https://www.googleapis.com/auth/spreadsheets"]
+                        )
+                    )
+                )
 
-            #     # Generate execution id and persist start record
-            #     execution_id = generate_execution_id()
-            #     save_execution_start(
-            #         execution_id=execution_id,
-            #         workflow_type="search_query",
-            #         triggered_by=user_id,
-            #         slack_command=text,
-            #     )
-
-
-            #     return {
-            #         "status": "success",
-            #         "message": f"Search processed (ID: {execution_id})",
-            #     }
+                count, url = publish_workflow.publish_approved()
+                bot_service.send_message(f"{count} pages are generated successfully publish url: {url}", ts)
+                return {
+                    "status": "success",
+                    "message": f"Search processed (ID: {execution_id})",
+                }
             
             # elif command == "/create_landing_page":
             #     default_logger.info("Processing /create_landing_page command")
